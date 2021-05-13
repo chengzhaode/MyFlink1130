@@ -1,4 +1,4 @@
-package com.atguigu.demo.bean;
+package com.atguigu.bean;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -6,16 +6,15 @@ import lombok.NoArgsConstructor;
 
 /**
  * @Author lizhenchao@atguigu.cn
- * @Date 2021/5/11 16:29
+ * @Date 2021/5/12 9:52
  */
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-public class UserBehavior {
+@NoArgsConstructor
+public class MarketingUserBehavior {
     private Long userId;
-    private Long itemId;
-    private Integer categoryId;
     private String behavior;
+    private String channel;
     private Long timestamp;
 }
 
