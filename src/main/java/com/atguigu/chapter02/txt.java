@@ -1,4 +1,4 @@
-package com.atguigu.chapter02.ssss;
+package com.atguigu.chapter02;
 
 /**
  * TODO
