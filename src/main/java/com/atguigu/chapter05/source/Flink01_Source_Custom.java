@@ -47,13 +47,11 @@ class MySocketSource implements SourceFunction<WaterSensor> {
     public void run(SourceContext<WaterSensor> ctx) throws Exception {
         Socket socket = new Socket(host, port);
         BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-
         String line = reader.readLine();
-        // sensor_1,1,10
-        while (!isCancel && line != null) {
+        while (!isCancel && line != null){
             String[] data = line.split(",");
-            ctx.collect(new WaterSensor(data[0], Long.valueOf(data[1]), Integer.valueOf(data[2])));
-            line = reader.readLine();  // 阻塞式
+            ctx.collect(new WaterSensor(data[0],Long.valueOf(data[1]),Integer.valueOf(data[2])));
+            line = reader.readLine();
         }
     }
 
