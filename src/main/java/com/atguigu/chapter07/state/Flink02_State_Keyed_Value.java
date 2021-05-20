@@ -2,6 +2,7 @@ package com.atguigu.chapter07.state;
 
 import com.atguigu.bean.WaterSensor;
 import org.apache.flink.api.common.state.ValueState;
+import org.apache.flink.api.common.state.ValueStateDescriptor;
 import org.apache.flink.api.java.functions.KeySelector;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
@@ -30,25 +31,26 @@ public class Flink02_State_Keyed_Value {
                             Long.valueOf(data[1]),
                             Integer.valueOf(data[2]));
                 })
-                .keyBy(new KeySelector<WaterSensor, String>() {
-                    @Override
-                    public String getKey(WaterSensor value) throws Exception {
-                        return value.getId();
-                    }
-                })
+                .keyBy(WaterSensor::getId)
                 .process(new KeyedProcessFunction<String, WaterSensor, String>() {
+
                     private ValueState<Integer> lastVcState;
+                    // 监控状态由flink的运行时对象管理
+                    @Override
+                    public void open(Configuration parameters) throws Exception {
+                        lastVcState = getRuntimeContext().getState(new ValueStateDescriptor<Integer>("name", Integer.class));
+                    }
+
                     @Override
                     public void processElement(WaterSensor value,
                                                Context ctx,
                                                Collector<String> out) throws Exception {
-
-                        Integer lastVc = lastVcState.value();
                         Integer currentVc = value.getVc();
-                        if (lastVc != null){
-                            if (currentVc - lastVc > 10){
-                                out.collect(ctx.getCurrentKey() + "水位上升：" + (currentVc - lastVc) + "红色预警");
-                            }
+                        Integer lastVc = lastVcState.value();
+                        if (lastVc != null) {
+                        if (currentVc - lastVc > 10) {
+                            out.collect(ctx.getCurrentKey() + " 水位上升: " + (currentVc - lastVc) + " 红色预警");
+                        }
                         }
                         lastVcState.update(currentVc);
                     }

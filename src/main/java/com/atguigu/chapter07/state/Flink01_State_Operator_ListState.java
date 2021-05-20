@@ -38,9 +38,9 @@ public class Flink01_State_Operator_ListState {
 
     }
     public static class MyMapFunction implements FlatMapFunction<String,String>,CheckpointedFunction{
-
-        private ListState<String> listState;
         ArrayList<String> list = new ArrayList<>();
+        private ListState<String> listState;
+
         @Override
         public void flatMap(String value, Collector<String> out) throws Exception {
 
@@ -49,22 +49,19 @@ public class Flink01_State_Operator_ListState {
                 out.collect(list.toString());
             }
         }
-        // 做Checkpoint, 其实把状态持久化存储, 将来恢复的可以从快照中恢复状态
-        // 周期的执行: 需要开启Checkpoint
+
         @Override
         public void snapshotState(FunctionSnapshotContext context) throws Exception {
-            //System.out.println("MyMapFunction.snapshotState");
             listState.update(list);
         }
-        // 初始化状态:  在这里应该把状态恢复到停机之前
-        // 这个将来是在程序启动的时候执行, 或者重启的执行
+
         @Override
-        public void initializeState(FunctionInitializationContext cxt) throws Exception {
-            //System.out.println("MyMapFunction.initializeState");
-            listState = cxt.getOperatorStateStore().getListState(new ListStateDescriptor<String>("listState", String.class));
-            for (String word : listState.get()) {
-                list.add(word);
+        public void initializeState(FunctionInitializationContext context) throws Exception {
+            ListState<String> listState = context.getOperatorStateStore().getUnionListState(new ListStateDescriptor<String>("listState", String.class));
+            for (String word : list) {
+                listState.add(word);
             }
+
         }
     }
 }
