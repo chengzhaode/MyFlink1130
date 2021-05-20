@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.example</groupId>
+    <groupId>com.atguigu</groupId>
     <artifactId>MyFlink1130</artifactId>
     <packaging>jar</packaging>
     <version>1.0-SNAPSHOT</version>
@@ -161,20 +161,28 @@
             <artifactId>flink-connector-hive_${scala.binary.version}</artifactId>
             <version>${flink.version}</version>
         </dependency>
-        <!-- Hive Dependency -->
         <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>RELEASE</version>
+            <scope>compile</scope>
+        </dependency>
+        <!-- Hive Dependency -->
+      <!--  <dependency>
             <groupId>org.apache.hive</groupId>
             <artifactId>hive-exec</artifactId>
             <version>3.1.2</version>
-        </dependency>
+        </dependency>-->
 
     </dependencies>
+
+
     <build>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>3.1.1</version>
+                <version>3.2.4</version>
                 <executions>
                     <execution>
                         <phase>package</phase>
@@ -202,7 +210,8 @@
                                 </filter>
                             </filters>
                             <transformers combine.children="append">
-                                <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer">
+                                <transformer
+                                        implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer">
                                 </transformer>
                             </transformers>
                         </configuration>

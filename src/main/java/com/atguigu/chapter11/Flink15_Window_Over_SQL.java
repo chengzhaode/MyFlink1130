@@ -22,7 +22,9 @@ import static org.apache.flink.table.api.Expressions.UNBOUNDED_ROW;
  * @version 1.0
  * @date 2021/5/19 18:41
  */
+
 public class Flink15_Window_Over_SQL {
+
     public static void main(String[] args) throws Exception {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(1);
