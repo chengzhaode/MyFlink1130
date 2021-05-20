@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class AdsClickLog {
     private Long userId;
-    private Long adId;
+    private Long adsId;
     private String province;
     private String city;
     private Long timestamp;
